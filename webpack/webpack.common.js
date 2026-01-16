@@ -9,7 +9,7 @@ const production = process.env.NODE_ENV === 'production';
 module.exports = {
 	entry: path.resolve(__dirname, '..', './src/index.tsx'), //точка входа в наше приложение содержит абсолютный путь к index.ts
 	output: {
-    path: path.resolve(__dirname, '..', './dist'), // путь, по которому будет собираться наш проект
+		path: path.resolve(__dirname, '..', './dist'), // путь, по которому будет собираться наш проект
     filename: production
         ? 'static/scripts/[name].[contenthash].js'
         : 'static/scripts/[name].js', // имя нашего бандла
@@ -79,9 +79,18 @@ module.exports = {
 		extensions: ['.js', '.jsx', '.tsx', '.ts', '.json'], //указываем файлы с которыми будет работать webpack
 	},
 	plugins: [
-    new webpack.EnvironmentPlugin({
+		new HTMLWebpackPlugins({
+			template: path.resolve(__dirname, '..', './public/index.html'),
+		}),
+		new CleanWebpackPlugin(),
+		new MiniCssExtractPlugin({
+			filename: production
+				? 'static/styles/[name].[contenthash].css'
+				: 'static/styles/[name].css',
+		}),
+		new webpack.EnvironmentPlugin({
             PUBLIC_PATH: null, // значение по умолчанию null, если переменная process.env.PUBLIC_PATH не передана
             NODE_ENV: 'development', // значение по умолчанию 'development', если переменная process.env.NODE_ENV не передана
         }),
-] ,
+	],
 };
